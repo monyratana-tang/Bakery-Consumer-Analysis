@@ -1,0 +1,251 @@
+---
+title: "Bakery Sales"
+author: "Monyratana Tang"
+date: "2026-04-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(arules)
+library(arulesViz)
+```
+#Recipie for Growth: Consumer Insight for Bakery Success
+> The objective is to analyze a bakery transaction data to identify *purchasing trends, consumer behavior, and product relationships* that can support business decision-making. From understanding these patterns, a recommendation would be given on their prodct offering, operational efficiency, and customer experience.
+...
+
+##Data Overview
+- Dataset was found on *Kaggle*
+- The name of the dataset is: <https://www.kaggle.com/datasets/akashdeepkuila/bakery>
+- **Variables that exsist:**
+  -**Numerical:**
+    - Transaction
+  -**Categorical:**
+    - Item
+    - date_time
+    - period_day
+  -**Date Time:**
+    - weekday_weekend
+- **Limitations**
+  - **Lack of revenue or pricing data:** The dataset showcases items that were purchased; however, there is no information monetary wise to understand how well the bakery is doing. This prevents analysis of product profitability and revenue contribution, to better assits the bakery. 
+  - **Lack of demographic data:** The dataset lacks demongraphic data to better segment consumer behavior by consumer type. Not allowing an opportunity to better target the consumer needs.
+  - **Limited Scope:** The data is most likely to have come from a single bakery; therefore, create a conclusion generalizing all bakeries is not possible, as it would not accurately be a representative of broader bakery industry trends
+  - **Association does not equal Causation:** There is an association analysis that occurs in this project to identifies products frequently purchased together; however, does not establish causation between purchasing decisions.
+
+##Data Cleaning
+To prepare the dataset for analysis, duplicate entries and missing values were checked, and categorical variables were reviewed for consistency.
+
+##Analysis Coding
+###Uploading the Dataset
+```{R}
+Bakery <- read.csv("~/Desktop/BZAN 6351 | Basic Programming for Business Analytics/Bakery Sales/bakery_sales_revised.csv")
+```
+
+###Calculating the Frequency of Items
+The data is counting the frequency of each bakery item purchased and sorts them from most purchased to least purchased. The results were stored in a new table called item_counts for further visualization and analysis.
+```{R}
+item_counts <- Bakery %>%
+  count(Item, sort = TRUE)
+```
+
+###Product Frequency
+The `length(unique(Bakery$Item))` code was used to determine the total number of unique products offered within the bakery dataset. Whereas, `head(item_counts, 10)` and `tail(item_counts, 10)` displays the top and bottom 10 most frequently purchased bakery items after sorting item purchase frequency in descending order.
+```{R}
+length(unique(Bakery$Item))
+head(item_counts, 10)
+tail(item_counts, 10)
+```
+
+
+###Product Frequency Bar Graph
+Purchase frequency was analyzed to identify the bakery’s highest and lowest performing products using a bargraph, providing insight into customer preferences and product demand.
+```{R}
+ggplot(item_counts[1:15,], aes(x = reorder(Item, n), y = n)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  coord_flip() +
+  labs(
+    title = "Top 10 Most Purchased Bakery Items",
+    x = "Bakery Item",
+    y = "Purchase Frequency"
+  ) +
+  theme_minimal() +
+  theme(
+  text = element_text(family = "Georgia"), 
+)
+
+ggplot(item_counts[74:94,], aes(x = reorder(Item, n), y = n)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  coord_flip() +
+  labs(
+    title = "Bottom 20 Most Purchased Bakery Items",
+    x = "Bakery Item",
+    y = "Purchase Frequency"
+  ) +
+  theme_minimal() +
+  theme(
+  text = element_text(family = "Georgia"), 
+)
+```
+####Result
+Coffee and bread dominate bakery sales by a significant margin, indicating they are the bakery’s highest-demand products. While several specialty items show extremely low purchase frequency and may contribute minimally to overall sales, usch as, Fairy Doors, Chimichurri Oil, or Raw bars.
+
+###Calculating the Frequency of the Period Day
+The data is counting the frequency of the time it was purchased such as night, evening, afternoon, and morning. The results were stored in a new table called daypart_counts for further visualization and analysis.
+```{R}
+daypart_counts <- Bakery %>%
+  count(period_day, sort = TRUE)
+```
+
+###Period Day Frequency Bar Graph
+Period day frequency was analyzed to identify the bakery’s highest and lowest time of selling the products using a bargraph, providing insight into the time customer mostly come in to buy something from the bakery.
+```{R}
+ggplot(daypart_counts, aes(x = reorder(period_day, n), y = n)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  labs(
+    title = "Bakery Purchases by Time of Day",
+    x = "Time of Day",
+    y = "Purchase Frequency"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Georgia"),
+    plot.title = element_text(face = "bold", size = 16)
+  )
+```
+####Result
+The bar graph shows that the bakery is mostly active in selling goods in the afternoon, then morning would be the most second active time. The evening and night showcases a dramatic difference in purchase brought, with barley activity of items being purchased during those times.
+
+###Calculating the Frequency of Items Bought on either a Weekend or Weekday
+The data is counting the frequency of the weither an item was bought on a weekend or weekday. The results were stored in a new table called behavior_counts for further visualization and analysis.
+```{R}
+behavior_counts <- Bakery %>%
+  count(weekday_weekend, sort = TRUE)
+```
+
+###Weekend vs Weekday Frequency Bar Graph
+The weekday_weekend was analyzed to identify the bakery’s highest and lowest time of selling the products between weekday vs weekwend using a bargraph, providing insight into the days customer mostly come in to buy something from the bakery.
+```{R}
+ggplot(behavior_counts, aes(x = weekday_weekend, y = n)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  labs(
+    title = "Bakery Purchases: Weekday vs Weekend",
+    x = "Day Type",
+    y = "Purchase Frequency"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Georgia"),
+    plot.title = element_text(face = "bold", size = 16)
+  )
+```
+####Result
+The bar graph shows that most of the bakery purchases are bought mostly on the weekdays compared to the weekend.
+
+###Calculating the Frequency of Items Bought on either a Weekend or Weekday
+The data is counting the frequency in which products (the top 10) were mostly bought on a weekday and weekend.The results were stored in a new table called top_items_daytype.
+```{R}
+top_items_daytype <- Bakery %>%
+  count(weekday_weekend, Item, sort = TRUE) %>%
+  group_by(weekday_weekend) %>%
+  slice_max(order_by = n, n = 10)
+```
+
+###Frequency of Items Bought on either a Weekend or Weekday Bar Graph
+The weekday_weekend was analyzed to identify the bakery’s highest products sold between weekend and weekday.
+```{R}
+ggplot(top_items_daytype, aes(x = reorder(Item, n), y = n, fill = weekday_weekend)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  facet_wrap(~weekday_weekend, scales = "free") +
+  scale_fill_manual(values = c(
+    "weekday" = "#8B1E3F",
+    "weekend" = "#C94C6D"
+  )) +
+  labs(
+    title = "Top 10 Purchases on a Weekend & Weekday"
+  ) +
+  theme(
+    legend.position = "none",
+    text = element_text(family = "Georgia"),
+    plot.title = element_text(face = "bold", size = 16)
+  )
+```
+####Result
+The bar graph for the Weekday highlights that coffee, bread and tea are the most bought products during the weekend. Similarly, the weekend showed the top 3 items being the same product. The big differences between the two bar graphs is that sandwhiches and hot chocloate are purchases more on the weekend compared to weekday. Additionally, medialunas and soups are not bought as often as well during the weekend compared to weekday, and is isntead replaces with scones and browines.
+
+###Calculating the Frequency of Items Bought in each Time Period of the Day
+The data is counting the frequency of how many products, are being sold at specific time period of the day (afternoon, evening, night, and morning). The results were stored in a new table called top_items_time.
+```{R}
+top_items_time <- Bakery %>%
+  count(period_day, Item, sort = TRUE) %>%
+  group_by(period_day) %>%
+  slice_max(order_by = n, n = 5)
+```
+
+###Frequency of Items Bought on either a Weekend or Weekday Bar Graph
+The bar graph is analyzing the relationship between each time period with the item purchases; therefore, showcasing which products are mostly bought during that time.
+```{R}
+ggplot(top_items_time, aes(x = reorder(Item, n), y = n, fill = period_day)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  facet_wrap(~period_day, scales = "free") +
+  theme(legend.position = "none")
+```
+
+####Result
+For the afternoon, morning, and evening bargraph the top two products are the bakery's coffee and bread. Tea appears to be purchased in the evening between the most than the other three times.These three times show similar products being actively purchased with one to two product varyin between each time period. Night time shows a dramatic differences in product purchased during this time.
+
+###Reconstructing Dataset
+This code restructures the dataset into a transaction-based format by grouping items purchased together within each transaction, allowing the Apriori algorithm to analyze product combinations.
+```{R}
+transactions <- split(Bakery$Item, Bakery$Transaction)
+transactions <- as(transactions, "transactions")
+```
+
+###Running Apriori
+This code runs the Apriori algorithm to identify product combinations that frequently occur together in customer transactions, based on minimum support and confidence thresholds.
+```{R}
+rules <- apriori(transactions,
+                 parameter = list(
+                   supp = 0.01,
+                   conf = 0.3,
+                   target = "rules"
+                 ))
+```
+
+###Ranking Apriori
+This code ranks association rules by lift and selects the strongest product relationships for analysis.
+```{R}
+inspect(sort(rules, by = "lift")[1:10])
+top_rules <- inspect(sort(rules, by = "lift")[1:5])
+inspect(sort(rules, by = "lift"))
+```
+
+###Frequency of Items Bought on either a Weekend or Weekday Bar Graph
+The top association rules were first sorted by lift to identify the strongest product pairings. A bar chart was then created using ggplot to visually compare the strength of these relationships based on their lift scores.
+```{R}
+top_rules_df <- as(sort(rules, by = "lift"), "data.frame")[1:5,]
+
+ggplot(top_rules_df, aes(x = reorder(rules, lift), y = lift)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  coord_flip() +
+  geom_text(aes(label = round(lift, 2)), hjust = -0.2) +
+  labs(
+    title = "Top Product Associations by Lift",
+    x = "Association Rule",
+    y = "Lift Score"
+  ) +
+  theme_minimal()
+```
+
+####Result
+The results indicate that coffee serves as a central complementary product, frequently purchased alongside a variety of bakery items. The strongest association was found between toast and coffee, with a lift score of 1.47, suggesting a significant likelihood of these items being purchased together beyond random chance.
+
+#Recommendation & Conclusion
+The Apriori association analysis revealed strong purchasing relationships among bakery items, with coffee emerging as the central complementary product. Several high-lift rules, such as Toast → Coffee and Pastry → Coffee, indicate that customers frequently pair coffee with breakfast and pastry items at rates significantly higher than random chance. This suggests that coffee plays a key role in driving additional purchases and is closely tied to customer routines, particularly during morning hours. Additionally, the consistency of coffee appearing across multiple high-ranking rules reinforces its importance as a core product within the bakery’s sales ecosystem.
+
+Based on these findings, several strategic recommendations can be made. The bakery should consider implementing bundled promotions, such as coffee paired with toast or pastries, to increase average transaction value. Optimizing store layout by placing coffee near high-demand complementary items could further encourage cross-selling behavior. Additionally, targeted marketing campaigns focusing on breakfast combinations may enhance customer engagement during peak periods. Finally, leveraging these associations in digital or in-store recommendations can help guide customer purchasing decisions and improve overall sales performance.
+
+This analysis explored bakery transaction data to better understand customer purchasing behavior and product relationships. The results showed that demand is heavily concentrated around staple items such as coffee and bread, with strong associations between coffee and breakfast-related products. These findings highlight the importance of complementary purchasing behavior and demonstrate how data-driven insights can be used to improve product strategy, increase sales, and enhance the overall customer experience.
+
+While this analysis provides valuable insights, it is limited by the absence of pricing and customer demographic data, restricting the ability to assess profitability and segment customer behavior. Additionally, the dataset represents a single bakery location, which may limit the generalizability of the findings.
