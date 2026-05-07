@@ -71,13 +71,29 @@ Additionally, the dataset does not include customer demographic information, lim
   - Coffee and pastries  
   - Coffee and breakfast items  
 
+### Top Purchased Bakery Products
+<img src="images/Top 5 Product Purchased.png" width="700"/>
+
+Coffee and bread dominate overall purchase frequency, suggesting customer demand is highly concentrated around a small group of core products. These items likely act as anchor products that drive repeat customer traffic and create opportunities for cross-selling complementary items.
+
+### Top Products Purchased by Day of Week
+<img src="images/Top 10 Most Purchased.png" width="700"/>
+Customer purchasing behavior remains relatively consistent throughout the week, with coffee and bread frequently among the top-selling products across nearly all days. However, purchase volume tends to increase toward the weekend, suggesting stronger leisure-driven demand and opportunities for weekend-focused promotions.
+
+### Product Association Analysis
+
+<img src="images/Top Product Association.png" width="700"/>
+
+Association rule mining revealed strong relationships between coffee and several bakery items, particularly toast, pastries, and breakfast products. These findings suggest opportunities for bundled promotions, optimized store layouts, and cross-selling strategies to increase transaction value.
+
+Customer purchasing behavior remains relatively consistent throughout the week, with coffee and bread frequently among the top-selling products on nearly all days. However, purchase volume tends to increase toward the weekend, suggesting stronger leisure-driven demand and opportunities for weekend-focused promotions.
 
 ## Recommendations
-Based on the analysis, several strategic recommendations can be made to improve bakery performance. First, staffing and promotional efforts should be aligned with peak demand periods. Promotional efforts should align with the time when peak demand occurs, such as a bundle deal on coffee and pastry at a slightly lower cost. Particularly on Friday through Sunday and during the morning and afternoon hours, there should be more employees on duty than usual to ensure efficient service and maximize sales opportunities. 
+Based on the analysis, several strategic recommendations can be made to improve bakery performance. First, staffing and promotional efforts should be aligned with peak demand periods. Promotional efforts should align with peak demand, such as a bundle deal on coffee and pastry at a slightly lower cost. Particularly on Friday through Sunday and during the morning and afternoon hours, there should be more employees on duty than usual to ensure efficient service and maximize sales opportunities. 
 
 Additionally, the bakery should introduce complementary product bundles, such as grab-and-go options and leisure-focused promotions, to increase basket size and enhance the customer experience. From this analysis, it could be inferred that more people can come on Friday - Sunday because of the leisure time they have. Bundles can be made to suit their needs, such as more relaxed, comforting meals. For Monday - Thursday, foods that are easy to warm up or pack would be essential for people who are in a rush for something quick. Optimizing store layout through clear signage and strategic product placement—especially pairing high-demand items like coffee with pastries—can further encourage additional purchases. Understanding what consumers often compare their coffee to is important, as it is an anchor item for the bakery. 
 
-From a product strategy perspective, maintaining stock availability of top-performing items is essential, while low-performing products should be reevaluated or rotated to improve overall portfolio efficiency. Especially when the product portfolio has 94 items, which can be a waste of inventory and money, as many bakery items have low liquidity. Expanding successful product categories can also drive growth, such as bread. There are multiple variation of bread, and can be easily adjusted to trends while not steering away from the core products that are frequently purchased and consumer are seeking to buy on a daily.
+From a product strategy perspective, maintaining stock availability of top-performing items is essential, while low-performing products should be reevaluated or rotated to improve overall portfolio efficiency. Especially when the product portfolio has 94 items, which can lead to inventory and financial waste, as many bakery items have low liquidity. Expanding successful product categories can also drive growth, such as bread. There are multiple variations of bread, and they can be easily adjusted to trends while not steering away from the core products that are frequently purchased and consumers are seeking to buy on a daily basis.
 
 Lastly, future data collection efforts should focus on gathering customer ratings, reviews, and survey feedback, and on incorporating pricing and profit data. This would allow for deeper insights into customer preferences and more informed decision-making, including the ability to segment customers and develop more targeted marketing strategies.
 
