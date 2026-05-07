@@ -1,9 +1,7 @@
-# Bakery Consumer Insights 🍞☕
+# Bakery Consumer Insights 🍞☕ 
+<img src="images/clay-banks-oNm9NkTFLfA-unsplash.jpg" align="right" width="275" style="margin-left: 15px;"/>
 
-This project applies data-driven analysis to bakery transaction data to understand customer purchasing behavior, evaluate product performance, and uncover meaningful product relationships.
-
-Using R, the analysis combines exploratory data analysis (EDA) and association rule modeling to generate actionable insights that can support business decision-making.
-
+The purpose of this project is to analyze bakery transaction data to better understand customer purchasing behavior and identify opportunities for business growth. Specifically, the project explores what products customers buy, when purchases occur, how purchasing patterns differ across time, and which products are frequently bought together. The goal is to transform transaction data into actionable insights that can support sales growth, operational efficiency, and customer experience improvements.
 
 ## Overview
 
@@ -16,27 +14,54 @@ The goal of this project is to analyze bakery sales data to answer key business 
 
 By answering these questions, the project provides insights into demand patterns and opportunities for improving sales strategies.
 
+## Dataset
+The dataset used in this project was obtained from Kaggle and contains bakery transaction records used to analyze customer purchasing behavior, product demand, and item associations.
 
-## Methods
+Source: [Bakery Dataset – Kaggle](https://www.kaggle.com/datasets/akashdeepkuila/bakery) The dataset used in this project was obtained from Kaggle and contains bakery transaction records used to analyze customer purchasing behavior, product demand, and item associations.
 
-This project was conducted in **R** using the following techniques:
+### Variables
+- `weekday_weekend`: Whether the purchase was made on a weekday or weekend
+- `period_day`: The time of day when the transaction happened (ex: morning, afternoon, evening, and night)
+- `transaction`: Unique purchaes/basket ID
+- `item`: The actual product purchased
+- `date_time`: Calendar date of purchase
 
-### Data Analysis
-- Data cleaning and preparation
+## Data Mining Operations
+
+This project was conducted in R using exploratory data analysis (EDA), visualization techniques, and association rule mining.
+
+### Data Wrangling
+- Cleaned and prepared transaction-level bakery data
+- Reviewed duplicate transactions and missing values
+- Converted `date_time` into usable time variables
+- Created additional variables such as:
+  - hour
+  - month
+  - day of week
+  - weekday vs weekend
+
+### Modeling & Analysis
 - Product demand analysis
-- Time-based purchasing analysis (daypart, weekday vs weekend)
+- Time-based purchasing behavior analysis
+- Weekday vs weekend comparisons
+- Apriori Association Rule Mining using `arules`
 
-### Visualization
-- Bar charts using `ggplot2`
-- Faceted comparisons across time periods
+### Why Apriori?
+The Apriori algorithm was selected because it is highly effective for market basket analysis and identifying products that are frequently purchased together within transaction-based datasets.
 
-### Modeling
-- **Apriori Association Rule Mining** (`arules`)
-- Identification of frequently purchased item combinations
-- Evaluation using support, confidence, and lift
+### Libraries Used
+- tidyverse (`dplyr`, `ggplot2`)
+- lubridate
+- arules
+- arulesViz
 
+## Limitations
 
-## Key Insights
+This project focuses on transaction-level purchase behavior and does not include financial variables such as product pricing, revenue, or profit margins. As a result, the analysis identifies high-demand products but cannot determine profitability or overall revenue contribution.
+
+Additionally, the dataset does not include customer demographic information, limiting deeper segmentation analysis. Some months were also missing from the dataset, preventing full-year seasonal analysis.
+
+## Model Outputs & Insights
 
 - **Coffee is the most purchased item**, acting as a central driver of sales  
 - Demand is **highly concentrated** around a few core products (e.g., coffee, bread)  
@@ -48,20 +73,13 @@ This project was conducted in **R** using the following techniques:
 
 
 ## Recommendations
+Based on the analysis, several strategic recommendations can be made to improve bakery performance. First, staffing and promotional efforts should be aligned with peak demand periods. Promotional efforts should align with the time when peak demand occurs, such as a bundle deal on coffee and pastry at a slightly lower cost. Particularly on Friday through Sunday and during the morning and afternoon hours, there should be more employees on duty than usual to ensure efficient service and maximize sales opportunities. 
 
-Based on the analysis:
+Additionally, the bakery should introduce complementary product bundles, such as grab-and-go options and leisure-focused promotions, to increase basket size and enhance the customer experience. From this analysis, it could be inferred that more people can come on Friday - Sunday because of the leisure time they have. Bundles can be made to suit their needs, such as more relaxed, comforting meals. For Monday - Thursday, foods that are easy to warm up or pack would be essential for people who are in a rush for something quick. Optimizing store layout through clear signage and strategic product placement—especially pairing high-demand items like coffee with pastries—can further encourage additional purchases. Understanding what consumers often compare their coffee to is important, as it is an anchor item for the bakery. 
 
-- **Bundle complementary products**  
-  (e.g., coffee + toast or pastry) to increase transaction value  
+From a product strategy perspective, maintaining stock availability of top-performing items is essential, while low-performing products should be reevaluated or rotated to improve overall portfolio efficiency. Especially when the product portfolio has 94 items, which can be a waste of inventory and money, as many bakery items have low liquidity. Expanding successful product categories can also drive growth, such as bread. There are multiple variation of bread, and can be easily adjusted to trends while not steering away from the core products that are frequently purchased and consumer are seeking to buy on a daily.
 
-- **Optimize store layout**  
-  Place coffee near high-demand items to encourage cross-selling  
-
-- **Focus on peak-time promotions**  
-  Target breakfast and high-traffic periods  
-
-- **Reevaluate low-performing items**  
-  Consider repositioning or promoting underperforming products  
+Lastly, future data collection efforts should focus on gathering customer ratings, reviews, and survey feedback, and on incorporating pricing and profit data. This would allow for deeper insights into customer preferences and more informed decision-making, including the ability to segment customers and develop more targeted marketing strategies.
 
 
 ## Files
@@ -72,19 +90,24 @@ Based on the analysis:
 - `bakery_sales_revised.csv` → Dataset  
 
 
-## Tools & Libraries
+## References
+Akashdeepkuila. Bakery Dataset. Kaggle.
+https://www.kaggle.com/datasets/akashdeepkuila/bakery 
 
-- R  
-- tidyverse (dplyr, ggplot2)  
-- arules  
-- arulesViz  
+Heeral Dedhia. *Market Basket Analysis Using Apriori Algorithm*. Kaggle. 
+https://www.kaggle.com/code/heeraldedhia/market-basket-analysis-using-apriori-algorithm
 
+talitacgs. *Market Basket Analysis with Apriori*. GitHub. 
+https://github.com/talitacgs/Market_basket_analysis_with_Apriori
 
-## Notes
+MNoorFawi. *Association Rules with R*. GitHub. 
+https://github.com/MNoorFawi/association-rules-with-R
 
-This project focuses on transaction-level data and does not include pricing or customer demographic information, which may limit deeper segmentation and profitability analysis.
+OpenAI. *ChatGPT*. Supplemental support used for R coding assistance.  
+https://chat.openai.com/
 
+Wickham, H., & Grolemund, G. *R for Data Science: Dates and Times*. 
+https://r4ds.had.co.nz/dates-and-times.html
 
-## Author
-
-Monyratana (Ratana) Tang
+Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. *R for Data Science: Data Visualization*. 
+https://r4ds.hadley.nz/data-visualize.html
